@@ -1,1 +1,6 @@
+# VS Code
 .vscode
+
+# .NET Files
+obj
+bin
