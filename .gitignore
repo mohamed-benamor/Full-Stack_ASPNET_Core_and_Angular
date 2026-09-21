@@ -4,3 +4,6 @@
 # .NET Files
 obj
 bin
+
+# SQLite files
+*.db*
