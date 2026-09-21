@@ -1,9 +1,10 @@
 # VS Code
-.vscode
+.vscode/
 
 # .NET Files
-obj
-bin
+obj/
+bin/
+./appsettings.json
 
 # SQLite files
 *.db*

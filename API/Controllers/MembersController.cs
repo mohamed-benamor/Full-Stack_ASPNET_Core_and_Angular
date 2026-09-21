@@ -4,23 +4,24 @@ using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
 public class MembersController(AppDbContext context) : ControllerBase
 {
   [HttpGet]
-  public ActionResult<IReadOnlyList<AppUser>> GetMembers()
+  public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
   {
-    var members = context.Users.ToList();
+    var members = await context.Users.ToListAsync();
 
     return members;
   }
 
   [HttpGet("{id}")]
-  public ActionResult<AppUser> GetMember(string id)
+  public async Task<ActionResult<AppUser>> GetMember(string id)
   {
-    var member = context.Users.Find(id);
+    var member = await context.Users.FindAsync(id);
 
     return member is null ? NotFound() : member;
   }
