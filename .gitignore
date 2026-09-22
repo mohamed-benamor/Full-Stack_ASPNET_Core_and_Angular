@@ -35,7 +35,7 @@ bun.lock
 *.sublime-workspace
 
 # Miscellaneous
-.angular/cache
+.angular
 .sass-cache
 connect.lock
 coverage
