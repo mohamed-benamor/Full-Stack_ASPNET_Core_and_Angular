@@ -1,14 +1,19 @@
+using API;
 using API.Data;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers(options =>
+  options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()))
+);
 
-builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
 builder.Services.AddCors();
 
 var app = builder.Build();
