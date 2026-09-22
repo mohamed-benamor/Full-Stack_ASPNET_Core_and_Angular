@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace API.Controllers;
+
+using API.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 public class WeatherForecastController : BaseApiController
 {

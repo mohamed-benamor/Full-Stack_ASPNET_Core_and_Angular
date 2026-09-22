@@ -1,6 +1,6 @@
-using System.Text.RegularExpressions;
+namespace API.Rules;
 
-namespace API;
+using System.Text.RegularExpressions;
 
 public partial class KebabCaseParameterTransformer : IOutboundParameterTransformer
 {

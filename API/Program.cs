@@ -1,14 +1,20 @@
-using API;
 using API.Data;
+using API.Rules;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers(options =>
-  options.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseParameterTransformer()))
-);
+builder
+  .Services.AddControllers(options =>
+    options.Conventions.Add(
+      new RouteTokenTransformerConvention(new KebabCaseParameterTransformer())
+    )
+  )
+  .AddJsonOptions(options =>
+    options.JsonSerializerOptions.PropertyNamingPolicy = new KababCaseNamingPolicy()
+  );
 
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
