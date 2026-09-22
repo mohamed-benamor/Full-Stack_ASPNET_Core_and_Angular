@@ -34,6 +34,31 @@ public class AccountController(AppDbContext context) : BaseApiController
     return user;
   }
 
+  [HttpPost("login")]
+  public async Task<ActionResult<AppUser>> Login(LoginDto body)
+  {
+    var user = await context.Users.SingleOrDefaultAsync(user => user.Email == body.Email);
+
+    if (user is null)
+    {
+      return Unauthorized("Invalid credentials");
+    }
+
+    using var hmac = new HMACSHA512(user.PasswordSalt);
+
+    var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(body.Password));
+
+    for (var i = 0; i < computeHash.Length; i++)
+    {
+      if (computeHash[i] != user.PasswordHash[i])
+      {
+        return Unauthorized("Invalid credentials");
+      }
+    }
+
+    return user;
+  }
+
   private async Task<bool> IsEmailExists(string email)
   {
     return await context.Users.AnyAsync(user => user.Email.ToLower() == email.ToLower());

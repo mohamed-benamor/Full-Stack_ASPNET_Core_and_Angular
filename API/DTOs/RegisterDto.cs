@@ -2,8 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs;
 
-public record RegisterDto(
-  [Required] string DisplayName,
-  [Required] [EmailAddress] string Email,
-  [Required] [MinLength(4)] string Password
-);
+public record RegisterDto
+{
+  [Required]
+  public required string DisplayName { get; set; }
+
+  [Required]
+  [EmailAddress]
+  public required string Email { get; set; }
+
+  [Required]
+  [MinLength(4)]
+  public required string Password { get; set; }
+};
