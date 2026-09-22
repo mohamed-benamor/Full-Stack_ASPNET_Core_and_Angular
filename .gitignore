@@ -34,6 +34,9 @@ bun.lock
 .settings
 *.sublime-workspace
 
+# Secrets
+ssl
+
 # Miscellaneous
 .angular
 .sass-cache
