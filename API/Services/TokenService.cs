@@ -11,14 +11,14 @@ public class TokenService(IConfiguration configuration) : ITokenService
 {
   public string CreateToken(AppUser user)
   {
-    var tokenKey = configuration["tokenKey"] ?? throw new Exception("Cannot get token key");
+    var jwtSecret = configuration["JwtSecret"] ?? throw new Exception("Cannot get token key");
 
-    if (tokenKey.Length < 64)
+    if (jwtSecret.Length < 64)
     {
       throw new Exception("Your token key must be 64 characters long or greater");
     }
 
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
 
     var claims = new List<Claim>
     {

@@ -5,13 +5,14 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-public class AccountController(AppDbContext context) : BaseApiController
+public class AccountController(AppDbContext context, ITokenService tokenService) : BaseApiController
 {
   [HttpPost("register")]
-  public async Task<ActionResult<AppUser>> Register(RegisterDto body)
+  public async Task<ActionResult<UserDto>> Register(RegisterDto body)
   {
     if (await IsEmailExists(body.Email))
     {
@@ -31,11 +32,17 @@ public class AccountController(AppDbContext context) : BaseApiController
     context.Users.Add(user);
     await context.SaveChangesAsync();
 
-    return user;
+    return new UserDto
+    {
+      Id = user.Id,
+      DisplayName = user.DisplayName,
+      Email = user.Email,
+      Token = tokenService.CreateToken(user),
+    };
   }
 
   [HttpPost("login")]
-  public async Task<ActionResult<AppUser>> Login(LoginDto body)
+  public async Task<ActionResult<UserDto>> Login(LoginDto body)
   {
     var user = await context.Users.SingleOrDefaultAsync(user => user.Email == body.Email);
 
@@ -56,7 +63,13 @@ public class AccountController(AppDbContext context) : BaseApiController
       }
     }
 
-    return user;
+    return new UserDto
+    {
+      Id = user.Id,
+      DisplayName = user.DisplayName,
+      Email = user.Email,
+      Token = tokenService.CreateToken(user),
+    };
   }
 
   private async Task<bool> IsEmailExists(string email)
