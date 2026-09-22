@@ -2,7 +2,7 @@ namespace API.Rules;
 
 using System.Text.Json;
 
-public class KababCaseNamingPolicy : JsonNamingPolicy
+public class KebabCaseNamingPolicy : JsonNamingPolicy
 {
   public override string ConvertName(string name)
   {

@@ -1,5 +1,7 @@
+using System.Text.Json;
 using API.Data;
 using API.Rules;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +15,31 @@ builder
     )
   )
   .AddJsonOptions(options =>
-    options.JsonSerializerOptions.PropertyNamingPolicy = new KababCaseNamingPolicy()
+    options.JsonSerializerOptions.PropertyNamingPolicy = JsonDefaults.KebabCaseOptions
   );
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+  options.InvalidModelStateResponseFactory = context =>
+  {
+    var namingPolicy = JsonDefaults.KebabCaseOptions;
+
+    var errors = context
+      .ModelState.Where(error => error.Value?.Errors.Count > 0)
+      .ToDictionary(
+        kvp => namingPolicy.ConvertName(kvp.Key),
+        kvp => kvp.Value!.Errors.Select(error => error.ErrorMessage).ToArray()
+      );
+
+    var problemDetails = new ValidationProblemDetails(errors)
+    {
+      Status = StatusCodes.Status400BadRequest,
+      Title = "One or more validation errors occurred",
+    };
+
+    return new BadRequestObjectResult(problemDetails);
+  };
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
