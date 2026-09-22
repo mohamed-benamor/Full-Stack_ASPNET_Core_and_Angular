@@ -9,6 +9,7 @@ import { Member } from "../types";
 })
 export class App implements OnInit {
   private http = inject(HttpClient);
+  protected title = signal("Members");
   protected members = signal<Member[]>([]);
 
   async ngOnInit() {
