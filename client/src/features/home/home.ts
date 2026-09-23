@@ -10,8 +10,6 @@ import { Member } from "../../types";
 export class Home {
   protected registerMode = signal(false);
 
-  public members = input.required<Member[]>();
-
   protected showRegister(value: boolean) {
     this.registerMode.set(value);
   }

@@ -1,6 +1,7 @@
-import { Component, input, output } from "@angular/core";
+import { Component, inject, input, output } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Member, RegisterRequest } from "../../../types";
+import { AccountService } from "../../../core/services/account-service";
 
 @Component({
   imports: [FormsModule],
@@ -8,13 +9,20 @@ import { Member, RegisterRequest } from "../../../types";
   templateUrl: "./register.component.html",
 })
 export class Register {
+  private service = inject(AccountService);
+
   protected credentials = {} as RegisterRequest;
 
-  public members = input.required<Member[]>();
   public cancelRegister = output<boolean>();
 
   public register() {
-    console.log(this.credentials);
+    this.service.register(this.credentials).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.cancel();
+      },
+      error: (error) => console.error(error.message),
+    });
   }
 
   public cancel() {
