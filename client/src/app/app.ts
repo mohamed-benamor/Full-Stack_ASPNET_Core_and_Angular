@@ -2,10 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 import { Member } from "../types";
+import { Nav } from "../layout/nav/nav";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
+  imports: [Nav],
 })
 export class App implements OnInit {
   private http = inject(HttpClient);
@@ -22,7 +24,7 @@ export class App implements OnInit {
     this.members.set(await this.getMembers());
   }
 
-  async getMembers() {
+  async getMembers(): Promise<Member[]> {
     try {
       return await lastValueFrom(this.http.get<Member[]>("https://localhost:8000/api/members"));
     } catch (error) {
