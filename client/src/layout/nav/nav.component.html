@@ -23,22 +23,22 @@
       <a class="hover:font-semibold" href="">Messages</a>
     </nav>
     <div class="flex items-center ml-auto gap-3">
-      @if (isLoggedIn()) {
+      @if (service.currentUser(); as user) {
         <div class="dropdown dropdown-end">
           <div
             tabindex="0"
             role="button"
             class="flex items-center text-base-content text-xl gap-3 cursor-pointer"
           >
-            <img src="/user.png" alt="user avatar" class="w-8 h-8 rounded-full" />
-            <span>Mohamed</span>
+            <img src="{{ user.imageUrl }}" alt="user avatar" class="w-8 h-8 rounded-full" />
+            <span>{{ user.displayName }}</span>
           </div>
           <ul
             tabindex="-1"
             class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
           >
             <li><a>Profile settings</a></li>
-            <li><button (click)="logout()">Logout</button></li>
+            <li><button (click)="service.logout()">Logout</button></li>
           </ul>
         </div>
       } @else {

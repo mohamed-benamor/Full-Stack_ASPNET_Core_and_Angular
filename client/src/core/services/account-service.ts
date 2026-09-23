@@ -5,10 +5,10 @@ import { tap } from "rxjs";
 
 @Service()
 export class AccountService {
-  private http = inject(HttpClient);
-  private currentUser = signal<User | null>(null);
-
   private readonly baseUrl = "https://localhost:8000/api";
+  private http = inject(HttpClient);
+
+  public currentUser = signal<User | null>(null);
 
   public login(credentials: LoginRequest) {
     return this.http.post<UserResponse>(`${this.baseUrl}/account/login`, credentials).pipe(

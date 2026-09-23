@@ -3,6 +3,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { lastValueFrom, map } from "rxjs";
 import { Nav } from "../layout/nav/nav";
 import { Member, MemberResponse } from "../types";
+import { AccountService } from "../core/services/account-service";
 
 @Component({
   selector: "app-root",
@@ -10,6 +11,7 @@ import { Member, MemberResponse } from "../types";
   imports: [Nav],
 })
 export class App implements OnInit {
+  private service = inject(AccountService);
   private http = inject(HttpClient);
   protected title = signal("Members");
   protected members = signal<Member[]>([]);
@@ -22,6 +24,19 @@ export class App implements OnInit {
     // });
 
     this.members.set(await this.getMembers());
+    this.setCurrentUser();
+  }
+
+  setCurrentUser() {
+    const userString = localStorage.getItem("user");
+
+    if (!userString) {
+      return;
+    }
+
+    const user = JSON.parse(userString);
+
+    this.service.currentUser.set(user);
   }
 
   async getMembers(): Promise<Member[]> {

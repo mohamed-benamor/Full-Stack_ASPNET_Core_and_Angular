@@ -8,24 +8,18 @@ import { AccountService } from "../../core/services/account-service";
   templateUrl: "./nav.component.html",
 })
 export class Nav {
-  private service = inject(AccountService);
-
   protected title = signal("Logo");
+  protected service = inject(AccountService);
   protected credentials = { email: "", password: "" };
-  protected isLoggedIn = signal(false);
 
   public login() {
     this.service.login(this.credentials).subscribe({
-      next: (result) => {
-        console.log(result);
-        this.isLoggedIn.set(true);
-        this.credentials = { email: "", password: "" };
-      },
+      next: (_) => (this.credentials = { email: "", password: "" }),
       error: (error) => alert(error.message),
     });
   }
 
   public logout() {
-    this.isLoggedIn.set(false);
+    this.service.logout();
   }
 }
