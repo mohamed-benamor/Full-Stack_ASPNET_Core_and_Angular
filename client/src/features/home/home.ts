@@ -12,7 +12,7 @@ export class Home {
 
   public members = input.required<Member[]>();
 
-  protected showRegister() {
-    this.registerMode.set(true);
+  protected showRegister(value: boolean) {
+    this.registerMode.set(value);
   }
 }
