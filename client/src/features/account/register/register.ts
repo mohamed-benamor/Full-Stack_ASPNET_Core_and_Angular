@@ -1,14 +1,16 @@
-import { Component } from "@angular/core";
+import { Component, input } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { RegisterRequest } from "../../../types";
+import { Member, RegisterRequest } from "../../../types";
 
 @Component({
   imports: [FormsModule],
   selector: "app-register",
-  templateUrl: "./register.html",
+  templateUrl: "./register.component.html",
 })
 export class Register {
   protected credentials = {} as RegisterRequest;
+
+  public members = input.required<Member[]>();
 
   public register() {
     console.log(this.credentials);

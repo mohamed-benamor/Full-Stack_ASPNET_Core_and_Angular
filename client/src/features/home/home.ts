@@ -1,5 +1,6 @@
-import { Component, signal } from "@angular/core";
+import { Component, input, signal } from "@angular/core";
 import { Register } from "../account/register/register";
+import { Member } from "../../types";
 
 @Component({
   imports: [Register],
@@ -8,6 +9,8 @@ import { Register } from "../account/register/register";
 })
 export class Home {
   protected registerMode = signal(false);
+
+  public members = input.required<Member[]>();
 
   protected showRegister() {
     this.registerMode.set(true);

@@ -15,7 +15,10 @@ export class App implements OnInit {
   private service = inject(AccountService);
   private http = inject(HttpClient);
 
+  protected members = signal<Member[]>([]);
+
   async ngOnInit() {
+    this.members.set(await this.getMembers());
     this.setCurrentUser();
   }
 
@@ -31,25 +34,25 @@ export class App implements OnInit {
     this.service.currentUser.set(user);
   }
 
-  // async getMembers(): Promise<Member[]> {
-  //   try {
-  //     return await lastValueFrom(
-  //       this.http.get<MemberResponse[]>("https://localhost:8000/api/members").pipe(
-  //         map((members) => {
-  //           return members.map(
-  //             (member) =>
-  //               ({
-  //                 id: member["id"],
-  //                 displayName: member["display-name"],
-  //                 imageUrl: member["image-url"] ?? "/user.png",
-  //               }) satisfies Member,
-  //           );
-  //         }),
-  //       ),
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //     throw error;
-  //   }
-  // }
+  async getMembers(): Promise<Member[]> {
+    try {
+      return await lastValueFrom(
+        this.http.get<MemberResponse[]>("https://localhost:8000/api/members").pipe(
+          map((members) => {
+            return members.map(
+              (member) =>
+                ({
+                  id: member["id"],
+                  displayName: member["display-name"],
+                  imageUrl: member["image-url"] ?? "/user.png",
+                }) satisfies Member,
+            );
+          }),
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
 }
