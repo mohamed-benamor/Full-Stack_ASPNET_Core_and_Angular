@@ -1,8 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { lastValueFrom } from "rxjs";
-import { Member } from "../types";
+import { lastValueFrom, map } from "rxjs";
 import { Nav } from "../layout/nav/nav";
+import { Member, MemberResponse } from "../types";
 
 @Component({
   selector: "app-root",
@@ -26,7 +26,20 @@ export class App implements OnInit {
 
   async getMembers(): Promise<Member[]> {
     try {
-      return await lastValueFrom(this.http.get<Member[]>("https://localhost:8000/api/members"));
+      return await lastValueFrom(
+        this.http.get<MemberResponse[]>("https://localhost:8000/api/members").pipe(
+          map((members) => {
+            return members.map(
+              (member) =>
+                ({
+                  id: member["id"],
+                  displayName: member["display-name"],
+                  imageUrl: member["image-url"] ?? "/user.png",
+                }) satisfies Member,
+            );
+          }),
+        ),
+      );
     } catch (error) {
       console.log(error);
       throw error;

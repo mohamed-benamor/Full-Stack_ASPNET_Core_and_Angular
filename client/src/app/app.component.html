@@ -6,7 +6,7 @@
     @for (member of members(); track member.id) {
       <li class="list-row items-center">
         <img src="/user.png" alt="User avatar" class="size-12 rounded-box" />
-        <div>{{ member["display-name"] }}</div>
+        <div>{{ member.displayName }}</div>
       </li>
     }
   </ul>

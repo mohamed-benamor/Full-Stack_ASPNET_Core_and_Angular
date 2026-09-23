@@ -1,13 +1,35 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Service } from "@angular/core";
+import { inject, Service, signal } from "@angular/core";
+import { LoginRequest, User, UserResponse } from "../../types";
+import { tap } from "rxjs";
 
 @Service()
 export class AccountService {
   private http = inject(HttpClient);
+  private currentUser = signal<User | null>(null);
 
   private readonly baseUrl = "https://localhost:8000/api";
 
-  login(credentials: { email: string; password: string }) {
-    return this.http.post(`${this.baseUrl}/account/login`, credentials);
+  public login(credentials: LoginRequest) {
+    return this.http.post<UserResponse>(`${this.baseUrl}/account/login`, credentials).pipe(
+      tap((user) => {
+        if (user) {
+          this.currentUser.set({
+            id: user["id"],
+            displayName: user["display-name"],
+            email: user["email"],
+            token: user["token"],
+            imageUrl: user["image-url"] ?? "/user.png",
+          });
+
+          localStorage.setItem("user", JSON.stringify(this.currentUser()));
+        }
+      }),
+    );
+  }
+
+  public logout() {
+    this.currentUser.set(null);
+    localStorage.removeItem("user");
   }
 }
