@@ -1,5 +1,6 @@
-import { Component, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { AccountService } from "../../core/services/account-service";
 
 @Component({
   imports: [FormsModule],
@@ -7,13 +8,15 @@ import { FormsModule } from "@angular/forms";
   templateUrl: "./nav.component.html",
 })
 export class Nav {
+  private service = inject(AccountService);
+
   protected title = signal("Logo");
-  protected credentials = {
-    email: "",
-    password: "",
-  };
+  protected credentials = { email: "", password: "" };
 
   public login() {
-    console.log(this.credentials);
+    this.service.login(this.credentials).subscribe({
+      next: (result) => console.log(result),
+      error: (error) => alert(error.message),
+    });
   }
 }
