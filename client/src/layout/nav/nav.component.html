@@ -43,6 +43,13 @@
           Messages
         </a>
       }
+      <a
+        class="hover:font-semibold"
+        routerLink="/errors"
+        routerLinkActive="text-accent font-semibold"
+      >
+        Errors
+      </a>
     </nav>
     <div class="flex items-center ml-auto gap-3">
       @if (service.currentUser(); as user) {
