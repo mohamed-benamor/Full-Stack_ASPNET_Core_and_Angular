@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from "@angular/common/http";
-import { inject } from "@angular/core";
+import { inject, model } from "@angular/core";
 import { catchError } from "rxjs";
 import { ToastService } from "../services/toast.service";
 
@@ -11,10 +11,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error) {
         switch (error.status) {
           case 400:
-            if (typeof error.error === "string") {
-              toast.error(error.error);
+            if (error.error.errors) {
+              const errors = error.error.errors;
+              const modelStateErrors = [];
+
+              for (const key in errors) {
+                if (errors[key]) {
+                  modelStateErrors.push(errors[key]);
+                }
+              }
+
+              throw modelStateErrors.flat();
             } else {
-              toast.error(error.error.title);
+              toast.error(`${error.error} ${error.status}`);
             }
             break;
 

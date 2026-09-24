@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, inject } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { RegisterRequest } from "../../types";
 
 @Component({
@@ -11,6 +11,8 @@ export class TestErrors {
   private http = inject(HttpClient);
   private baseUrl = "https://localhost:8000/api";
 
+  protected validationErrors = signal<string[]>([]);
+
   protected get400Error() {
     this.http.get(`${this.baseUrl}/buggy/bad-request`).subscribe({
       next: response => console.log(response),
@@ -19,10 +21,15 @@ export class TestErrors {
   }
 
   protected get400ValidationError() {
-    this.http.post(`${this.baseUrl}/account/register`, {}).subscribe({
-      next: response => console.log(response),
-      error: error => console.log(error),
-    });
+    this.http
+      .post(`${this.baseUrl}/account/register`, { "display-name": "", email: "", password: "" })
+      .subscribe({
+        next: response => console.log(response),
+        error: error => {
+          console.log(error);
+          this.validationErrors.set(error);
+        },
+      });
   }
 
   protected get401Error() {
