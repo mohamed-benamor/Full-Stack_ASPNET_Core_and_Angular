@@ -24,6 +24,11 @@
           "path": "src/core/guards",
           "skipTests": true,
           "typeSeparator": "."
+        },
+        "@schematics/angular:interceptor": {
+          "path": "src/core/interceptors",
+          "skipTests": true,
+          "typeSeparator": "."
         }
       },
       "root": "",
