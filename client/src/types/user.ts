@@ -11,5 +11,5 @@ export type User = {
   displayName: string;
   email: string;
   token: string;
-  imageUrl: string;
+  imageUrl?: string;
 };

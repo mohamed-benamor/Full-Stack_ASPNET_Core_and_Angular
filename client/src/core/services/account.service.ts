@@ -16,7 +16,7 @@ export class AccountService {
       displayName: user["display-name"],
       email: user["email"],
       token: user["token"],
-      imageUrl: user["image-url"] ?? "/user.png",
+      imageUrl: user["image-url"],
     });
 
     localStorage.setItem("user", JSON.stringify(this.currentUser()));
@@ -24,7 +24,7 @@ export class AccountService {
 
   public register(credentials: RegisterRequest) {
     return this.http.post<UserResponse>(`${this.baseUrl}/account/register`, credentials).pipe(
-      tap((user) => {
+      tap(user => {
         if (user) {
           this.setCurrentUser(user);
         }
@@ -34,7 +34,7 @@ export class AccountService {
 
   public login(credentials: LoginRequest) {
     return this.http.post<UserResponse>(`${this.baseUrl}/account/login`, credentials).pipe(
-      tap((user) => {
+      tap(user => {
         if (user) {
           this.setCurrentUser(user);
         }

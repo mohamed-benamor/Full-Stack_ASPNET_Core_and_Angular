@@ -19,12 +19,12 @@ export class Nav {
 
   public login() {
     this.service.login(this.credentials).subscribe({
-      next: (_) => {
+      next: _ => {
         this.router.navigateByUrl("/members");
         this.toast.success("Logged in successfully");
         this.credentials = { email: "", password: "" };
       },
-      error: (error) => {
+      error: error => {
         const email = error?.error?.errors?.email;
         const password = error?.error?.errors?.password;
 

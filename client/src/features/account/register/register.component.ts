@@ -17,11 +17,11 @@ export class Register {
 
   public register() {
     this.service.register(this.credentials).subscribe({
-      next: (response) => {
+      next: response => {
         console.log(response);
         this.cancel();
       },
-      error: (error) => console.error(error.message),
+      error: error => console.error(error.message),
     });
   }
 
