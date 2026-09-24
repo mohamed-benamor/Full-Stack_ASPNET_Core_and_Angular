@@ -1,6 +1,6 @@
 import { Component, inject } from "@angular/core";
 import { Router, RouterOutlet } from "@angular/router";
-import { Nav } from "../layout/nav/nav.component";
+import { Nav } from "@layout/nav/nav.component";
 
 @Component({
   selector: "app-root",

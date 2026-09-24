@@ -1,8 +1,8 @@
 import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { AccountService } from "../../core/services/account.service";
+import { AccountService } from "@services/account.service";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { ToastService } from "../../core/services/toast.service";
+import { ToastService } from "@services/toast.service";
 
 @Component({
   imports: [FormsModule, RouterLink, RouterLinkActive],

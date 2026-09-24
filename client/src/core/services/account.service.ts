@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
-import { LoginRequest, RegisterRequest, User, UserResponse } from "../../types";
+import { LoginRequest, RegisterRequest, User, UserResponse } from "@types";
 import { tap } from "rxjs";
 
 @Service()

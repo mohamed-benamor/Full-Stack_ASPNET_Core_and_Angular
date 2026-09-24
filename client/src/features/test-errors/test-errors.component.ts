@@ -1,6 +1,5 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, inject, signal } from "@angular/core";
-import { RegisterRequest } from "../../types";
 
 @Component({
   imports: [],
