@@ -6,6 +6,7 @@ import { Lists } from "../features/lists/lists.component";
 import { Messages } from "../features/messages/messages.component";
 import { authGuard } from "../core/guards/auth.guard";
 import { TestErrors } from "../features/test-errors/test-errors.component";
+import { NotFound } from "../shared/errors/not-found/not-found.component";
 
 export const routes: Routes = [
   { path: "", component: Home },
@@ -21,5 +22,5 @@ export const routes: Routes = [
     ],
   },
   { path: "errors", component: TestErrors },
-  { path: "**", component: Home },
+  { path: "**", component: NotFound },
 ];
