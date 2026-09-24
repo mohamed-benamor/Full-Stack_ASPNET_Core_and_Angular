@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { lastValueFrom, map } from "rxjs";
-import { Nav } from "../layout/nav/nav";
+import { Nav } from "../layout/nav/nav.component";
 import { Member, MemberResponse } from "../types";
-import { AccountService } from "../core/services/account-service";
+import { AccountService } from "../core/services/account.service";
 import { Router, RouterOutlet } from "@angular/router";
 
 @Component({

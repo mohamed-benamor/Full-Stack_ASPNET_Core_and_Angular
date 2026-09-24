@@ -10,13 +10,15 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
+          "path": "src",
           "skipTests": true,
           "style": "none",
-          "path": "src"
+          "type": "component"
         },
         "@schematics/angular:service": {
+          "path": "src/core/services",
           "skipTests": true,
-          "path": "src/core/services"
+          "type": "service"
         }
       },
       "root": "",

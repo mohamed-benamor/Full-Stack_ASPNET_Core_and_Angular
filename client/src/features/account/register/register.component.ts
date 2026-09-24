@@ -1,7 +1,7 @@
 import { Component, inject, input, output } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Member, RegisterRequest } from "../../../types";
-import { AccountService } from "../../../core/services/account-service";
+import { AccountService } from "../../../core/services/account.service";
 
 @Component({
   imports: [FormsModule],

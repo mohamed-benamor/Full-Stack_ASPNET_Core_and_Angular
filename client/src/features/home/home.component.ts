@@ -1,5 +1,5 @@
 import { Component, input, signal } from "@angular/core";
-import { Register } from "../account/register/register";
+import { Register } from "../account/register/register.component";
 import { Member } from "../../types";
 
 @Component({
