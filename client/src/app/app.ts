@@ -4,18 +4,19 @@ import { lastValueFrom, map } from "rxjs";
 import { Nav } from "../layout/nav/nav";
 import { Member, MemberResponse } from "../types";
 import { AccountService } from "../core/services/account-service";
-import { Home } from "../features/home/home";
+import { Router, RouterOutlet } from "@angular/router";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  imports: [Nav, Home],
+  imports: [Nav, RouterOutlet],
 })
 export class App implements OnInit {
   private service = inject(AccountService);
   private http = inject(HttpClient);
 
   protected members = signal<Member[]>([]);
+  protected router = inject(Router);
 
   async ngOnInit() {
     this.members.set(await this.getMembers());
