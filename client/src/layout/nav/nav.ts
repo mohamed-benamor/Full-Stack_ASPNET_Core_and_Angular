@@ -1,9 +1,10 @@
 import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { AccountService } from "../../core/services/account-service";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink, RouterLinkActive],
   selector: "app-nav",
   templateUrl: "./nav.component.html",
 })
