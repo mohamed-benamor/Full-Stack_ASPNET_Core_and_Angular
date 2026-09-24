@@ -19,6 +19,11 @@
           "path": "src/core/services",
           "skipTests": true,
           "type": "service"
+        },
+        "@schematics/angular:guard": {
+          "path": "src/core/guards",
+          "skipTests": true,
+          "typeSeparator": "."
         }
       },
       "root": "",
