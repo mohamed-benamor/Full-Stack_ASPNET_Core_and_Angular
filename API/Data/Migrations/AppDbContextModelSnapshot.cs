@@ -84,6 +84,30 @@ namespace API.Data.Migrations
                     b.ToTable("Members");
                 });
 
+            modelBuilder.Entity("API.Entities.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("API.Entities.Member", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "User")
@@ -93,6 +117,17 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Entities.Photo", b =>
+                {
+                    b.HasOne("API.Entities.Member", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
                 });
 #pragma warning restore 612, 618
         }
