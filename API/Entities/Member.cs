@@ -1,6 +1,7 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace API.Entities;
+
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 public class Member
 {
@@ -14,8 +15,10 @@ public class Member
   public DateTime Created { get; set; } = DateTime.UtcNow;
   public DateTime LastActive { get; set; } = DateTime.UtcNow;
 
+  [JsonIgnore]
   public List<Photo> Photos { get; set; } = [];
 
+  [JsonIgnore]
   [ForeignKey(nameof(Id))]
   public AppUser User { get; set; } = null!;
 }
