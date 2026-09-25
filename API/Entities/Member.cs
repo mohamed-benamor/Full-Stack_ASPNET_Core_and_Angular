@@ -14,6 +14,8 @@ public class Member
   public DateTime Created { get; set; } = DateTime.UtcNow;
   public DateTime LastActive { get; set; } = DateTime.UtcNow;
 
+  public List<Photo> Photos { get; set; } = [];
+
   [ForeignKey(nameof(Id))]
   public AppUser User { get; set; } = null!;
 }
