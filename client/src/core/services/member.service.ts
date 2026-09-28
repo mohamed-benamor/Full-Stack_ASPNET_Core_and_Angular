@@ -13,22 +13,12 @@ export class MemberService {
 
   public getMembers(): Observable<Member[]> {
     return this.http
-      .get<MemberResponse[]>(`${this.baseUrl}/members`, this.getHttpOptions())
+      .get<MemberResponse[]>(`${this.baseUrl}/members`)
       .pipe(map(members => members.map<Member>(this.toMember)));
   }
 
   public getMember(id: string): Observable<Member> {
-    return this.http
-      .get<MemberResponse>(`${this.baseUrl}/members/${id}`, this.getHttpOptions())
-      .pipe(map(this.toMember));
-  }
-
-  private getHttpOptions() {
-    return {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${this.accountService.currentUser()?.token}`,
-      }),
-    };
+    return this.http.get<MemberResponse>(`${this.baseUrl}/members/${id}`).pipe(map(this.toMember));
   }
 
   private toMember(response: MemberResponse): Member {
