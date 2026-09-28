@@ -3,9 +3,10 @@ import { Component, inject } from "@angular/core";
 import { MemberService } from "@services/member.service";
 import { Member } from "@types";
 import { Observable } from "rxjs";
+import { MemberCard } from "../member-card/member-card.component";
 
 @Component({
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, MemberCard],
   selector: "app-member-list",
   templateUrl: "./member-list.component.html",
 })
