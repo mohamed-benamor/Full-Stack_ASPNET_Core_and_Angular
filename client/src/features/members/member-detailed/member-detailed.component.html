@@ -1,4 +1,4 @@
-@if ($member | async; as member) {
+@if (member(); as member) {
   <div class="flex gap-6">
     <div class="card bg-base-200 flex-col h-[85vh] w-1/4 p-2">
       @if (member.imageUrl) {
@@ -40,7 +40,6 @@
         <button class="btn btn-info flex-1">Go back</button>
         <button class="btn btn-primary flex-1">Like</button>
       </div>
-      <!-- <h1 class="text-3xl">{{ member.displayName }}</h1> -->
     </div>
 
     <div class="card bg-base-300 w-3/4 p-6">

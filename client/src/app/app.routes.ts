@@ -11,6 +11,7 @@ import { ServerError } from "@shared/errors/server-error/server-error.component"
 import { MemberProfile } from "@features/members/member-profile/member-profile.component";
 import { MemberPhotos } from "@features/members/member-photos/member-photos.component";
 import { MemberMessages } from "@features/members/member-messages/member-messages.component";
+import { memberResolver } from "@features/members/member.resolver";
 
 export const routes: Routes = [
   { path: "", component: Home },
@@ -22,6 +23,8 @@ export const routes: Routes = [
       { path: "members", component: MemberList },
       {
         path: "members/:id",
+        resolve: { member: memberResolver },
+        runGuardsAndResolvers: "always",
         component: MemberDetailed,
         children: [
           { path: "", redirectTo: "profile", pathMatch: "full" },
