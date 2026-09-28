@@ -15,6 +15,7 @@
     "module": "preserve",
     "paths": {
       "@app/*": ["./src/app/*"],
+      "@constants": ["./src/constants/index.ts"],
       "@environments": ["./src/environments/environment.ts"],
       "@guards/*": ["./src/core/guards/*"],
       "@features/*": ["./src/features/*"],
