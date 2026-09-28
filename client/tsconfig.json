@@ -16,6 +16,7 @@
     "paths": {
       "@app/*": ["./src/app/*"],
       "@guards/*": ["./src/core/guards/*"],
+      "@environments": ["./src/environments/environment.ts"],
       "@interceptors/*": ["./src/core/interceptors/*"],
       "@services/*": ["./src/core/services/*"],
       "@features/*": ["./src/features/*"],

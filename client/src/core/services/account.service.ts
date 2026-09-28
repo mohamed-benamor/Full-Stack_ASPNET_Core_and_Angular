@@ -1,12 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
+import { environment } from "@environments";
 import { LoginRequest, RegisterRequest, User, UserResponse } from "@types";
 import { tap } from "rxjs";
 
 @Service()
 export class AccountService {
-  private readonly baseUrl = "https://localhost:8000/api";
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl;
 
   public currentUser = signal<User | null>(null);
 
