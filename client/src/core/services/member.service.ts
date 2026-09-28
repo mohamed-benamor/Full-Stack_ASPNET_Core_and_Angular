@@ -30,6 +30,7 @@ export class MemberService {
       city: response["city"],
       country: response["country"],
       dateOfBirth: response["date-of-birth"],
+      description: response["description"],
       imageUrl: response["image-url"],
       created: response["created"],
       lastActive: response["last-active"],

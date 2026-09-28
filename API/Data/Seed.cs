@@ -46,6 +46,7 @@ public class Seed
           City = member.City,
           Country = member.Country,
           DateOfBirth = member.DateOfBirth,
+          Description = member.Description,
           ImageUrl = member.ImageUrl,
           Created = member.Created,
           LastActive = member.LastActive,

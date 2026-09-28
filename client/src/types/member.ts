@@ -6,6 +6,7 @@ export type MemberResponse = {
   city: string;
   country: string;
   "date-of-birth": Date;
+  description?: string;
   "image-url"?: string;
   created: Date;
   "last-active": Date;
@@ -19,6 +20,7 @@ export type Member = {
   city: string;
   country: string;
   dateOfBirth: Date;
+  description?: string;
   imageUrl?: string;
   created: Date;
   lastActive: Date;
