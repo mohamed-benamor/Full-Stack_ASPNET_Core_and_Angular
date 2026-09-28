@@ -15,11 +15,6 @@
           "style": "none",
           "type": "component"
         },
-        "@schematics/angular:service": {
-          "path": "src/core/services",
-          "skipTests": true,
-          "type": "service"
-        },
         "@schematics/angular:guard": {
           "path": "src/core/guards",
           "skipTests": true,
@@ -30,10 +25,20 @@
           "skipTests": true,
           "typeSeparator": "."
         },
+        "@schematics/angular:pipe": {
+          "path": "src/core/pipes",
+          "skipTests": true,
+          "typeSeparator": "."
+        },
         "@schematics/angular:resolver": {
           "path": "src",
           "skipTests": true,
           "typeSeparator": "."
+        },
+        "@schematics/angular:service": {
+          "path": "src/core/services",
+          "skipTests": true,
+          "type": "service"
         }
       },
       "root": "",

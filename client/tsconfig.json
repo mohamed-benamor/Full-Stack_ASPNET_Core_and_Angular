@@ -15,12 +15,13 @@
     "module": "preserve",
     "paths": {
       "@app/*": ["./src/app/*"],
-      "@guards/*": ["./src/core/guards/*"],
       "@environments": ["./src/environments/environment.ts"],
-      "@interceptors/*": ["./src/core/interceptors/*"],
-      "@services/*": ["./src/core/services/*"],
+      "@guards/*": ["./src/core/guards/*"],
       "@features/*": ["./src/features/*"],
+      "@interceptors/*": ["./src/core/interceptors/*"],
       "@layout/*": ["./src/layout/*"],
+      "@pipes/*": ["./src/core/pipes/*"],
+      "@services/*": ["./src/core/services/*"],
       "@shared/*": ["./src/shared/*"],
       "@types": ["./src/types/index.ts"]
     }

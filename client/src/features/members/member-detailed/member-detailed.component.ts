@@ -7,12 +7,13 @@ import {
   RouterLinkActive,
   RouterOutlet,
 } from "@angular/router";
+import { AgePipe } from "@pipes/age.pipe";
 import { NotFound } from "@shared/errors/not-found/not-found.component";
 import { Member } from "@types";
 import { filter } from "rxjs";
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, NotFound, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, NotFound, RouterOutlet, AgePipe],
   selector: "app-member-detailed",
   templateUrl: "./member-detailed.component.html",
 })
