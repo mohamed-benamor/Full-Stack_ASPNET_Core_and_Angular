@@ -1,5 +1,8 @@
 @if (member(); as member) {
-  <div class="card">
+  <a
+    routerLink="/members/{{ member.id }}"
+    class="card transition-all duration-300 ease-in-out transform hover:-translate-y-2"
+  >
     @if (member.imageUrl) {
       <img src="{{ member.imageUrl }}" alt="{{ member.displayName }}" class="rounded-lg" />
     } @else {
@@ -17,11 +20,13 @@
       </svg>
     }
 
-    <div class="card-actions bg-base-300 z-40 absolute bottom-0 w-full px-3 py-1 rounded-b-lg">
+    <div
+      class="card-actions z-40 absolute bottom-0 w-full px-3 py-1 rounded-b-lg bg-linear-to-t from-base-300 via-base-300/75 to-base-300/0"
+    >
       <div class="flex flex-col text-base-content">
         <span class="font-semibold">{{ member.displayName }}, 25</span>
         <span class="text-sm">{{ member.city }}, 25</span>
       </div>
     </div>
-  </div>
+  </a>
 }
