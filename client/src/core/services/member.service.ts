@@ -1,15 +1,13 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { environment } from "@environments";
 import { Member, MemberResponse, Photo, PhotoResponse } from "@types";
-import { AccountService } from "./account.service";
 import { map, Observable } from "rxjs";
 
 @Service()
 export class MemberService {
   private readonly baseUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
-  private readonly accountService = inject(AccountService);
 
   public getMembers(): Observable<Member[]> {
     return this.http

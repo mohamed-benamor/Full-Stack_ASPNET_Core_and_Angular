@@ -1,9 +1,10 @@
+import { DatePipe } from "@angular/common";
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Member } from "@types";
 
 @Component({
-  imports: [],
+  imports: [DatePipe],
   selector: "app-member-profile",
   templateUrl: "./member-profile.component.html",
 })
