@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { inject, Service } from "@angular/core";
 import { environment } from "@environments";
-import { Member, MemberResponse } from "@types";
+import { Member, MemberResponse, Photo, PhotoResponse } from "@types";
 import { AccountService } from "./account.service";
 import { map, Observable } from "rxjs";
 
@@ -19,6 +19,18 @@ export class MemberService {
 
   public getMember(id: string): Observable<Member> {
     return this.http.get<MemberResponse>(`${this.baseUrl}/members/${id}`).pipe(map(this.toMember));
+  }
+
+  public getMemberPhotos(id: string): Observable<Photo[]> {
+    return this.http.get<PhotoResponse[]>(`${this.baseUrl}/members/${id}/photos`).pipe(
+      map(photos =>
+        photos.map(photo => ({
+          id: photo["id"],
+          url: photo["url"],
+          publicId: photo["public-id"],
+        })),
+      ),
+    );
   }
 
   private toMember(response: MemberResponse): Member {
