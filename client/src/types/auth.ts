@@ -1,10 +1,10 @@
-export type RegisterRequest = {
-  "display-name": string;
+type AuthBase = {
   email: string;
   password: string;
 };
 
-export type LoginRequest = {
-  email: string;
-  password: string;
+export type RegisterRequest = AuthBase & {
+  "display-name": string;
 };
+
+export type LoginRequest = AuthBase;

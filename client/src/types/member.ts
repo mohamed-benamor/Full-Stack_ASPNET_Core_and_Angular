@@ -1,41 +1,37 @@
-export type MemberResponse = {
+type MemberBase = {
   id: string;
-  "display-name": string;
   email: string;
   gender: string;
   city: string;
   country: string;
-  "date-of-birth": Date;
   description?: string;
-  "image-url"?: string;
   created: Date;
+};
+
+export type MemberResponse = MemberBase & {
+  "display-name": string;
+  "date-of-birth": Date;
+  "image-url"?: string;
   "last-active": Date;
 };
 
-export type Member = {
-  id: string;
+export type Member = MemberBase & {
   displayName: string;
-  email: string;
-  gender: string;
-  city: string;
-  country: string;
   dateOfBirth: Date;
-  description?: string;
   imageUrl?: string;
-  created: Date;
   lastActive: Date;
 };
 
-export type EditableMember = {
-  displayName: string;
+type MemberBodyBase = {
   description?: string;
   city: string;
   country: string;
 };
 
-export type MemberBodyRequest = {
+export type EditableMember = MemberBodyBase & {
+  displayName: string;
+};
+
+export type MemberBodyRequest = MemberBodyBase & {
   "display-name": string;
-  description?: string;
-  city: string;
-  country: string;
 };

@@ -1,11 +1,12 @@
-export type PhotoResponse = {
+type PhotoBase = {
   id: number;
   url: string;
+};
+
+export type PhotoResponse = PhotoBase & {
   "public-id"?: string;
 };
 
-export type Photo = {
-  id: number;
-  url: string;
+export type Photo = PhotoBase & {
   publicId?: string;
 };

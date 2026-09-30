@@ -1,15 +1,15 @@
-export type UserResponse = {
+type UserBase = {
   id: string;
-  "display-name": string;
   email: string;
   token: string;
+};
+
+export type UserResponse = UserBase & {
+  "display-name": string;
   "image-url"?: string;
 };
 
-export type User = {
-  id: string;
+export type User = UserBase & {
   displayName: string;
-  email: string;
-  token: string;
   imageUrl?: string;
 };
