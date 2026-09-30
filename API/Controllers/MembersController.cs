@@ -1,5 +1,7 @@
 namespace API.Controllers;
 
+using System.Security.Claims;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +14,38 @@ public class MembersController(IMemberRepository repository) : BaseApiController
   public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
   {
     return Ok(await repository.GetMembersAsync());
+  }
+
+  [HttpPut]
+  public async Task<ActionResult> UpdateRequest(MemberUpdateDto body)
+  {
+    var memberId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (memberId is null)
+    {
+      return BadRequest("Invalid token");
+    }
+
+    var member = await repository.GetMemberByIdAsync(memberId);
+
+    if (member is null)
+    {
+      return BadRequest("Could not found member");
+    }
+
+    member.DisplayName = body.DisplayName ?? member.DisplayName;
+    member.Description = body.Description ?? member.Description;
+    member.City = body.City ?? member.City;
+    member.Country = body.Country ?? member.Country;
+
+    repository.Update(member);
+
+    if (await repository.SaveAllAsync())
+    {
+      return NoContent();
+    }
+
+    return BadRequest("Faild to update member");
   }
 
   [HttpGet("{id}")]
