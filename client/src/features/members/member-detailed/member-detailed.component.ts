@@ -11,7 +11,6 @@ import { AgePipe } from "@pipes/age.pipe";
 import { AccountService } from "@services/account.service";
 import { MemberService } from "@services/member.service";
 import { NotFound } from "@shared/errors/not-found/not-found.component";
-import { Member } from "@types";
 import { filter } from "rxjs";
 
 @Component({
