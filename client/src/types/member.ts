@@ -32,3 +32,10 @@ export type EditableMember = {
   city: string;
   country: string;
 };
+
+export type MemberBodyRequest = {
+  "display-name": string;
+  description?: string;
+  city: string;
+  country: string;
+};

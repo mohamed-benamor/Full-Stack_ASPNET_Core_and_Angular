@@ -1,7 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
-import { Member, MemberResponse, Photo, PhotoResponse } from "@types";
+import {
+  EditableMember,
+  Member,
+  MemberBodyRequest,
+  MemberResponse,
+  Photo,
+  PhotoResponse,
+} from "@types";
 import { map, Observable } from "rxjs";
 
 @Service()
@@ -33,19 +40,24 @@ export class MemberService {
     );
   }
 
+  public updateMember(member: EditableMember) {
+    return this.http.put(`${this.baseUrl}/members`, this.toRequest(member));
+  }
+
   private toMember(response: MemberResponse): Member {
     return {
-      id: response["id"],
+      ...response,
       displayName: response["display-name"],
-      email: response["email"],
-      gender: response["gender"],
-      city: response["city"],
-      country: response["country"],
       dateOfBirth: response["date-of-birth"],
-      description: response["description"],
       imageUrl: response["image-url"],
-      created: response["created"],
       lastActive: response["last-active"],
+    };
+  }
+
+  private toRequest(member: EditableMember): MemberBodyRequest {
+    return {
+      ...member,
+      "display-name": member.displayName,
     };
   }
 }

@@ -59,10 +59,13 @@ export class MemberProfile implements OnInit, OnDestroy {
 
     const updateMember = { ...this.member(), ...this.editableMember };
 
-    console.log(updateMember);
-
-    this.toast.success("Profile updated successfully");
-    this.memberService.editMode.set(false);
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        this.toast.success("Profile updated successfully");
+        this.memberService.editMode.set(false);
+        this.editForm?.reset(updateMember);
+      },
+    });
   }
 
   public ngOnDestroy(): void {
