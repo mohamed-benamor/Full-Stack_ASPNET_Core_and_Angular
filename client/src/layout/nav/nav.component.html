@@ -1,4 +1,4 @@
-<header class="fixed bg-base-200 navbar z-50 shadow-md">
+<header class="fixed bg-base-200 navbar z-1 shadow-md">
   <div class="w-full flex align-middle px-10 mx-auto gap-6">
     <a
       routerLink="/"
@@ -115,7 +115,7 @@
             tabindex="-1"
             class="dropdown-content menu bg-base-300 rounded-box z-1 w-52 mt-2 p-2 shadow-sm"
           >
-            <li><a>Profile settings</a></li>
+            <li><a routerLink="/members/{{ user.id }}">Profile settings</a></li>
             <li><button (click)="service.logout()">Logout</button></li>
           </ul>
         </div>
