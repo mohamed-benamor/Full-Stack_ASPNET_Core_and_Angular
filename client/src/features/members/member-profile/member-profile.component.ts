@@ -1,15 +1,6 @@
 import { DatePipe } from "@angular/common";
-import {
-  Component,
-  HostListener,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-  ViewChild,
-} from "@angular/core";
+import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 import { MemberService } from "@services/member.service";
 import { ToastService } from "@services/toast.service";
 import { EditableMember, Member } from "@types";
@@ -20,11 +11,9 @@ import { EditableMember, Member } from "@types";
   templateUrl: "./member-profile.component.html",
 })
 export class MemberProfile implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(ToastService);
 
-  protected readonly memberService = inject(MemberService);
-  protected member = signal<Member | undefined>(undefined);
+  protected readonly service = inject(MemberService);
   protected editableMember: EditableMember = {
     displayName: "",
     description: "",
@@ -41,34 +30,32 @@ export class MemberProfile implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.parent?.data.subscribe(data => {
-      this.member.set(data["member"]);
-    });
     this.editableMember = {
-      displayName: this.member()?.displayName || "",
-      description: this.member()?.description || "",
-      city: this.member()?.city || "",
-      country: this.member()?.country || "",
+      displayName: this.service.member()?.displayName || "",
+      description: this.service.member()?.description || "",
+      city: this.service.member()?.city || "",
+      country: this.service.member()?.country || "",
     };
   }
 
   public updateProfile() {
-    if (!this.member()) {
+    if (!this.service.member()) {
       return;
     }
 
-    const updateMember = { ...this.member(), ...this.editableMember };
+    const updateMember = { ...this.service.member(), ...this.editableMember };
 
-    this.memberService.updateMember(this.editableMember).subscribe({
+    this.service.updateMember(this.editableMember).subscribe({
       next: () => {
         this.toast.success("Profile updated successfully");
-        this.memberService.editMode.set(false);
+        this.service.editMode.set(false);
+        this.service.member.set(updateMember as Member);
         this.editForm?.reset(updateMember);
       },
     });
   }
 
   public ngOnDestroy(): void {
-    this.memberService.editMode.set(false);
+    this.service.editMode.set(false);
   }
 }
