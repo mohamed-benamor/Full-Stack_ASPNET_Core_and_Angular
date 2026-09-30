@@ -1,5 +1,13 @@
 import { DatePipe } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit, signal, ViewChild } from "@angular/core";
+import {
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MemberService } from "@services/member.service";
@@ -15,8 +23,6 @@ export class MemberProfile implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(ToastService);
 
-  @ViewChild("editForm") protected editForm?: NgForm;
-
   protected readonly memberService = inject(MemberService);
   protected member = signal<Member | undefined>(undefined);
   protected editableMember: EditableMember = {
@@ -25,6 +31,14 @@ export class MemberProfile implements OnInit, OnDestroy {
     city: "",
     country: "",
   };
+
+  @ViewChild("editForm") public editForm?: NgForm;
+
+  @HostListener("window:beforeunload", ["$event"]) notify($event: BeforeUnloadEvent) {
+    if (this.editForm?.dirty) {
+      $event.preventDefault();
+    }
+  }
 
   public ngOnInit(): void {
     this.route.parent?.data.subscribe(data => {
