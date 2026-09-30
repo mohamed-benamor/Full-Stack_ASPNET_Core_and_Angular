@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Service } from "@angular/core";
+import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
 import { Member, MemberResponse, Photo, PhotoResponse } from "@types";
 import { map, Observable } from "rxjs";
@@ -8,6 +8,8 @@ import { map, Observable } from "rxjs";
 export class MemberService {
   private readonly baseUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
+
+  public editMode = signal(false);
 
   public getMembers(): Observable<Member[]> {
     return this.http
