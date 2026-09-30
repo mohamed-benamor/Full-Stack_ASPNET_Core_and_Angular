@@ -4,6 +4,7 @@ import { AccountService } from "@services/account.service";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ToastService } from "@services/toast.service";
 import { themes } from "@constants";
+import { BusyService } from "@services/busy.service";
 
 @Component({
   imports: [FormsModule, RouterLink, RouterLinkActive],
@@ -11,13 +12,14 @@ import { themes } from "@constants";
   templateUrl: "./nav.component.html",
 })
 export class Nav implements OnInit {
-  private router = inject(Router);
-  private toast = inject(ToastService);
+  private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
-  protected title = signal("Logo");
-  protected service = inject(AccountService);
+  protected readonly accountService = inject(AccountService);
+  protected readonly busyService = inject(BusyService);
+  protected readonly selectedTheme = signal<string>(localStorage.getItem("theme") || "light");
+  protected readonly title = signal("Logo");
   protected credentials = { email: "", password: "" };
-  protected selectedTheme = signal<string>(localStorage.getItem("theme") || "light");
   protected themes = themes;
 
   protected handleSelectedTheme(theme: string) {
@@ -36,7 +38,7 @@ export class Nav implements OnInit {
   }
 
   public login() {
-    this.service.login(this.credentials).subscribe({
+    this.accountService.login(this.credentials).subscribe({
       next: () => {
         this.router.navigateByUrl("/members");
         this.toast.success("Logged in successfully");
@@ -58,7 +60,7 @@ export class Nav implements OnInit {
   }
 
   public logout() {
-    this.service.logout();
+    this.accountService.logout();
     this.router.navigateByUrl("/");
     this.toast.info("Logged out");
   }
