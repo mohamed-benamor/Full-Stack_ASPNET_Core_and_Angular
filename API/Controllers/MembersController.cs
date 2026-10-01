@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
-public class MembersController(IMemberRepository repository) : BaseApiController
+public class MembersController(IMemberRepository repository, IPhotoService photoService)
+  : BaseApiController
 {
   [HttpGet]
   public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
@@ -57,5 +58,40 @@ public class MembersController(IMemberRepository repository) : BaseApiController
   public async Task<ActionResult<IReadOnlyList<Photo>>> GetMemberPhotos(string id)
   {
     return Ok(await repository.GetPhotosForMemberAsync(id));
+  }
+
+  [HttpPost("add-photo")]
+  public async Task<ActionResult<Photo>> AddPhoto([FromForm] IFormFile file)
+  {
+    var member = await repository.GetMemberForUpdate(User.GetMemberId());
+
+    if (member is null)
+    {
+      return BadRequest("Cannot update member");
+    }
+
+    var result = await photoService.UploadPhotoAsync(file);
+
+    if (result.Error != null)
+    {
+      return BadRequest(result.Error.Message);
+    }
+
+    var photo = new Photo { Url = result.SecureUrl.AbsoluteUri, PublicId = result.PublicId };
+
+    if (member.ImageUrl is null)
+    {
+      member.ImageUrl = photo.Url;
+      member.User.ImageUrl = photo.Url;
+    }
+
+    member.Photos.Add(photo);
+
+    if (await repository.SaveAllAsync())
+    {
+      return photo;
+    }
+
+    return BadRequest("Problem adding photo");
   }
 }
