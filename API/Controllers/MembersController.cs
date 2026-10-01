@@ -94,4 +94,32 @@ public class MembersController(IMemberRepository repository, IPhotoService photo
 
     return BadRequest("Problem adding photo");
   }
+
+  [HttpPut("profile-photo/{photoId}")]
+  public async Task<ActionResult> UpdateProfilePhoto(int photoId)
+  {
+    var member = await repository.GetMemberForUpdate(User.GetMemberId());
+
+    if (member is null)
+    {
+      return BadRequest("Cannot get member from token");
+    }
+
+    var photo = member.Photos.SingleOrDefault(photo => photo.Id == photoId);
+
+    if (photo is null || member.ImageUrl == photo.Url)
+    {
+      return BadRequest("Cannot set this as main image");
+    }
+
+    member.ImageUrl = photo.Url;
+    member.User.ImageUrl = photo.Url;
+
+    if (await repository.SaveAllAsync())
+    {
+      return NoContent();
+    }
+
+    return BadRequest("Problem setting main photo");
+  }
 }
