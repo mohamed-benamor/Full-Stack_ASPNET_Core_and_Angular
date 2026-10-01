@@ -56,6 +56,10 @@ export class MemberService {
     return this.http.post<Photo>(`${this.baseUrl}/members/add-photo`, formData);
   }
 
+  public updateProfilePhoto(photo: Photo) {
+    return this.http.put(`${this.baseUrl}/members/profile-photo/${photo.id}`, {});
+  }
+
   private toMember(response: MemberResponse): Member {
     return {
       ...response,
