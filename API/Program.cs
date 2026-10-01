@@ -57,6 +57,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
+builder.Services.AddScoped<IPhotoService, PhotoService>();
+
 builder.Services.Configure<CloudinarySettings>(
   builder.Configuration.GetSection("CloudinarySettings")
 );
