@@ -1,32 +1,43 @@
-import { AsyncPipe } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { MemberService } from "@services/member.service";
+import { ImageUpload } from "@shared/image-upload/image-upload.component";
 import { Photo } from "@types";
-import { Observable } from "rxjs";
 
 @Component({
-  imports: [AsyncPipe],
+  imports: [ImageUpload],
   selector: "app-member-photos",
   templateUrl: "./member-photos.component.html",
 })
-export class MemberPhotos {
-  private readonly service = inject(MemberService);
+export class MemberPhotos implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
-  protected $photos?: Observable<Photo[]>;
+  protected readonly service = inject(MemberService);
+  protected readonly photos = signal<Photo[]>([]);
+  protected readonly loading = signal(false);
 
-  constructor() {
+  ngOnInit(): void {
     const memberId = this.route.parent?.snapshot.paramMap.get("id");
 
     if (memberId) {
-      this.$photos = this.service.getMemberPhotos(memberId);
+      this.service.getMemberPhotos(memberId).subscribe({
+        next: photos => this.photos.set(photos),
+      });
     }
   }
 
-  // get photoMocks() {
-  //   return Array.from({ length: 20 }, (_, i) => ({
-  //     url: `https://randomuser.me/api/portraits/women/${i}.jpg`,
-  //   }));
-  // }
+  protected onUploadImage(file: File) {
+    this.loading.set(true);
+    this.service.updatePhoto(file).subscribe({
+      next: photo => {
+        this.service.editMode.set(false);
+        this.loading.set(false);
+        this.photos.update(photos => [...photos, photo]);
+      },
+      error: error => {
+        console.log(`Error uploading image: ${error}`);
+        this.loading.set(false);
+      },
+    });
+  }
 }

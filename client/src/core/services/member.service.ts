@@ -48,6 +48,14 @@ export class MemberService {
     return this.http.put(`${this.baseUrl}/members`, this.toRequest(member));
   }
 
+  public updatePhoto(file: File) {
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    return this.http.post<Photo>(`${this.baseUrl}/members/add-photo`, formData);
+  }
+
   private toMember(response: MemberResponse): Member {
     return {
       ...response,
