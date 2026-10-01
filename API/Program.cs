@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Middlewares;
 using API.Rules;
@@ -55,6 +56,10 @@ builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+
+builder.Services.Configure<CloudinarySettings>(
+  builder.Configuration.GetSection("CloudinarySettings")
+);
 
 builder
   .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
