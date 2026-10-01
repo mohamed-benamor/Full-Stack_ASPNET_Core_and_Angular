@@ -4,9 +4,10 @@ import { AccountService } from "@services/account.service";
 import { MemberService } from "@services/member.service";
 import { ImageUpload } from "@shared/image-upload/image-upload.component";
 import { Member, Photo, User } from "@types";
+import { StarButton } from "@shared/star-button/star-button.component";
 
 @Component({
-  imports: [ImageUpload],
+  imports: [ImageUpload, StarButton],
   selector: "app-member-photos",
   templateUrl: "./member-photos.component.html",
 })
