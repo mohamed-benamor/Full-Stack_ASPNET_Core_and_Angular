@@ -60,6 +60,10 @@ export class MemberService {
     return this.http.put(`${this.baseUrl}/members/profile-photo/${photo.id}`, {});
   }
 
+  public deletePhoto(photoId: number) {
+    return this.http.delete(`${this.baseUrl}/members/delete-photo/${photoId}`);
+  }
+
   private toMember(response: MemberResponse): Member {
     return {
       ...response,

@@ -5,9 +5,10 @@ import { MemberService } from "@services/member.service";
 import { ImageUpload } from "@shared/image-upload/image-upload.component";
 import { Member, Photo, User } from "@types";
 import { StarButton } from "@shared/star-button/star-button.component";
+import { DeleteButton } from "@shared/delete-button/delete-button.component";
 
 @Component({
-  imports: [ImageUpload, StarButton],
+  imports: [ImageUpload, StarButton, DeleteButton],
   selector: "app-member-photos",
   templateUrl: "./member-photos.component.html",
 })
@@ -62,6 +63,14 @@ export class MemberPhotos implements OnInit {
               imageUrl: photo.url,
             }) as Member,
         );
+      },
+    });
+  }
+
+  protected deletePhoto(photoId: number) {
+    this.memberService.deletePhoto(photoId).subscribe({
+      next: () => {
+        this.photos.update(photos => photos.filter(photo => photo.id !== photoId));
       },
     });
   }
