@@ -2,14 +2,24 @@
   <div class="card-title justify-center text-3xl text-primary">Sign up</div>
   <div class="card-body w-full">
     <form [formGroup]="registerForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
-      <label class="floating-label">
+      <label class="floating-label flex-col text-left">
         <span>Display name</span>
         <input
           type="text"
           class="input w-full"
+          [class.input-error]="
+            registerForm.controls['displayName'].invalid &&
+            registerForm.controls['displayName'].touched
+          "
           formControlName="displayName"
           placeholder="Display name"
         />
+        @if (
+          registerForm.controls["displayName"].invalid &&
+          registerForm.controls["displayName"].touched
+        ) {
+          <div class="text-error pl-3 pt-1 text-xs">Display name is required</div>
+        }
       </label>
 
       <label class="floating-label">
