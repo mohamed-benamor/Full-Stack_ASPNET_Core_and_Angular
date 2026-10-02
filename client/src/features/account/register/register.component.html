@@ -2,50 +2,10 @@
   <div class="card-title justify-center text-3xl text-primary">Sign up</div>
   <div class="card-body w-full">
     <form [formGroup]="registerForm" class="flex flex-col gap-4 w-full" (ngSubmit)="register()">
-      <label class="floating-label flex-col text-left">
-        <span>Display name</span>
-        <input
-          type="text"
-          class="input w-full"
-          [class.input-error]="
-            registerForm.controls['displayName'].invalid &&
-            registerForm.controls['displayName'].touched
-          "
-          formControlName="displayName"
-          placeholder="Display name"
-        />
-        @if (
-          registerForm.controls["displayName"].invalid &&
-          registerForm.controls["displayName"].touched
-        ) {
-          <div class="text-error pl-3 pt-1 text-xs">Display name is required</div>
-        }
-      </label>
-
-      <label class="floating-label">
-        <span>Email</span>
-        <input type="email" class="input w-full" formControlName="email" placeholder="Email" />
-      </label>
-
-      <label class="floating-label">
-        <span>Password</span>
-        <input
-          type="password"
-          class="input w-full"
-          formControlName="password"
-          placeholder="Password"
-        />
-      </label>
-
-      <label class="floating-label">
-        <span>Confirm password</span>
-        <input
-          type="password"
-          class="input w-full"
-          formControlName="confirmPassword"
-          placeholder="Confirm password"
-        />
-      </label>
+      <app-text-input type="text" label="Display name" formControlName="displayName" />
+      <app-text-input type="email" label="Email" formControlName="email" />
+      <app-text-input type="password" label="Password" formControlName="password" />
+      <app-text-input type="password" label="Confirm password" formControlName="confirmPassword" />
 
       <div class="flex items-center justify-end gap-3">
         <button (click)="cancel()" type="button" class="btn">Cancel</button>

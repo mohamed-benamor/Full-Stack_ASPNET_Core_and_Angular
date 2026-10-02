@@ -11,9 +11,10 @@ import {
 } from "@angular/forms";
 import { AccountService } from "@services/account.service";
 import { RegisterRequest } from "@types";
+import { TextInput } from "@shared/text-input/text-input.component";
 
 @Component({
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, TextInput],
   selector: "app-register",
   templateUrl: "./register.component.html",
 })
