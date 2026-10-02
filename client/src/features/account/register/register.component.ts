@@ -1,6 +1,6 @@
 import { JsonPipe } from "@angular/common";
 import { Component, inject, OnInit, output } from "@angular/core";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AccountService } from "@services/account.service";
 import { RegisterRequest } from "@types";
 
@@ -21,15 +21,6 @@ export class Register implements OnInit {
     this.initializeFrom();
   }
 
-  initializeFrom() {
-    this.registerForm = new FormGroup({
-      email: new FormControl(),
-      displayName: new FormControl(),
-      password: new FormControl(),
-      confirmPassword: new FormControl(),
-    });
-  }
-
   public register() {
     console.log(this.registerForm.value);
     // this.service.register(this.credentials).subscribe({
@@ -43,5 +34,18 @@ export class Register implements OnInit {
 
   public cancel() {
     this.cancelRegister.emit(false);
+  }
+
+  protected initializeFrom() {
+    this.registerForm = new FormGroup({
+      email: new FormControl("johndoe@test.com", [Validators.required, Validators.email]),
+      displayName: new FormControl("", [Validators.required]),
+      password: new FormControl("", [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(16),
+      ]),
+      confirmPassword: new FormControl("", Validators.required),
+    });
   }
 }
