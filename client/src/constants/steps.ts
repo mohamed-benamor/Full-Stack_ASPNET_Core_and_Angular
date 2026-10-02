@@ -1,0 +1,2 @@
+export const FIRST_REGISTER_FORM_STEP = 1;
+export const MAX_REGISTER_FORM_STEPS = 2;

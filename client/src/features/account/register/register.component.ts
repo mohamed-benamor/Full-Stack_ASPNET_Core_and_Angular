@@ -1,5 +1,5 @@
 import { JsonPipe } from "@angular/common";
-import { Component, inject, output } from "@angular/core";
+import { Component, inject, output, signal } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -9,9 +9,9 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
+import { FIRST_REGISTER_FORM_STEP, MAX_REGISTER_FORM_STEPS } from "@constants";
 import { AccountService } from "@services/account.service";
 import { TextInput } from "@shared/text-input/text-input.component";
-import { RegisterRequest } from "@types";
 
 @Component({
   imports: [ReactiveFormsModule, JsonPipe, TextInput],
@@ -22,26 +22,40 @@ export class Register {
   private readonly service = inject(AccountService);
   private readonly formBuilder = inject(FormBuilder);
 
-  protected credentials = {} as RegisterRequest;
-  protected readonly registerForm: FormGroup;
+  protected readonly credentialsForm: FormGroup;
+  protected readonly profileForm: FormGroup;
+  protected currentStep = signal(1);
 
-  public cancelRegister = output<boolean>();
+  protected cancelRegister = output<boolean>();
 
-  constructor() {
-    this.registerForm = this.formBuilder.group({
+  public constructor() {
+    this.credentialsForm = this.formBuilder.group({
       email: ["", [Validators.required, Validators.email]],
-      displayName: ["", [Validators.required]],
+      displayName: ["", Validators.required],
       password: ["", [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
       confirmPassword: ["", [Validators.required, this.matchValues("password")]],
     });
 
-    this.registerForm.controls["password"].valueChanges.subscribe(() => {
-      this.registerForm.controls["confirmPassword"].updateValueAndValidity();
+    this.profileForm = this.formBuilder.group({
+      gender: ["", Validators.required],
+      dateOfBirth: ["", Validators.required],
+      city: ["", Validators.required],
+      country: ["", Validators.required],
+    });
+
+    this.credentialsForm.controls["password"].valueChanges.subscribe(() => {
+      this.credentialsForm.controls["confirmPassword"].updateValueAndValidity();
     });
   }
 
-  public register() {
-    console.log(this.registerForm.value);
+  protected register() {
+    console.log(this.credentialsForm.value);
+
+    if (this.credentialsForm.valid && this.profileForm.valid) {
+      const formData = { ...this.credentialsForm.value, ...this.profileForm.value };
+
+      console.log("From data: ", formData);
+    }
     // this.service.register(this.credentials).subscribe({
     //   next: response => {
     //     console.log(response);
@@ -51,8 +65,18 @@ export class Register {
     // });
   }
 
-  public cancel() {
+  protected cancel() {
     this.cancelRegister.emit(false);
+  }
+
+  protected nextStep() {
+    if (this.credentialsForm.valid) {
+      this.currentStep.update(prevStep => Math.min(MAX_REGISTER_FORM_STEPS, prevStep + 1));
+    }
+  }
+
+  protected prevStep() {
+    this.currentStep.update(prevStep => Math.max(FIRST_REGISTER_FORM_STEP, prevStep - 1));
   }
 
   private matchValues(matchTo: string): ValidatorFn {
