@@ -11,16 +11,6 @@ export class AccountService {
 
   public currentUser = signal<User | null>(null);
 
-  private toUser(user: UserResponse): User {
-    return {
-      id: user["id"],
-      displayName: user["display-name"],
-      email: user["email"],
-      token: user["token"],
-      imageUrl: user["image-url"],
-    };
-  }
-
   public setCurrentUser(user: User) {
     this.currentUser.set(user);
 
@@ -28,7 +18,13 @@ export class AccountService {
   }
 
   public register(credentials: RegisterRequest) {
-    return this.http.post<UserResponse>(`${this.baseUrl}/account/register`, credentials).pipe(
+    const body = {
+      ...credentials,
+      "display-name": credentials["displayName"],
+      "date-of-birth": credentials["dateOfBirth"],
+    };
+
+    return this.http.post<UserResponse>(`${this.baseUrl}/account/register`, body).pipe(
       tap(user => {
         if (user) {
           this.setCurrentUser(this.toUser(user));
@@ -50,5 +46,15 @@ export class AccountService {
   public logout() {
     this.currentUser.set(null);
     localStorage.removeItem("user");
+  }
+
+  private toUser(user: UserResponse): User {
+    return {
+      id: user["id"],
+      displayName: user["display-name"],
+      email: user["email"],
+      token: user["token"],
+      imageUrl: user["image-url"],
+    };
   }
 }

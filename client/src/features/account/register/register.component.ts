@@ -1,4 +1,3 @@
-import { JsonPipe } from "@angular/common";
 import { Component, inject, output, signal } from "@angular/core";
 import {
   AbstractControl,
@@ -9,24 +8,27 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
+import { Router } from "@angular/router";
 import { FIRST_REGISTER_FORM_STEP, MAX_REGISTER_FORM_STEPS } from "@constants";
 import { AccountService } from "@services/account.service";
 import { TextInput } from "@shared/text-input/text-input.component";
 
 @Component({
-  imports: [ReactiveFormsModule, JsonPipe, TextInput],
+  imports: [ReactiveFormsModule, TextInput],
   selector: "app-register",
   templateUrl: "./register.component.html",
 })
 export class Register {
   private readonly service = inject(AccountService);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly router = inject(Router);
 
   protected readonly credentialsForm: FormGroup;
   protected readonly profileForm: FormGroup;
-  protected currentStep = signal(1);
+  protected readonly currentStep = signal(1);
+  protected readonly validationErrors = signal<string[]>([]);
 
-  protected cancelRegister = output<boolean>();
+  protected readonly cancelRegister = output<boolean>();
 
   public constructor() {
     this.credentialsForm = this.formBuilder.group({
@@ -37,7 +39,7 @@ export class Register {
     });
 
     this.profileForm = this.formBuilder.group({
-      gender: ["", Validators.required],
+      gender: ["male", Validators.required],
       dateOfBirth: ["", Validators.required],
       city: ["", Validators.required],
       country: ["", Validators.required],
@@ -49,20 +51,17 @@ export class Register {
   }
 
   protected register() {
-    console.log(this.credentialsForm.value);
-
     if (this.credentialsForm.valid && this.profileForm.valid) {
       const formData = { ...this.credentialsForm.value, ...this.profileForm.value };
 
-      console.log("From data: ", formData);
+      this.service.register(formData).subscribe({
+        next: () => this.router.navigateByUrl("/members"),
+        error: error => {
+          console.error(error);
+          this.validationErrors.set(error);
+        },
+      });
     }
-    // this.service.register(this.credentials).subscribe({
-    //   next: response => {
-    //     console.log(response);
-    //     this.cancel();
-    //   },
-    //   error: error => console.error(error.message),
-    // });
   }
 
   protected cancel() {
