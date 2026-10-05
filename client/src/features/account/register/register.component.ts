@@ -79,6 +79,13 @@ export class Register {
     this.currentStep.update(prevStep => Math.max(FIRST_REGISTER_FORM_STEP, prevStep - 1));
   }
 
+  protected getMaxDate(): string {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18);
+
+    return today.toISOString().split("T")[0];
+  }
+
   private matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const parent = control.parent;

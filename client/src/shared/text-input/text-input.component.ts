@@ -8,7 +8,8 @@ import { ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule } fro
 })
 export class TextInput implements ControlValueAccessor {
   public label = input.required<string>();
-  public type = input.required<"text" | "email" | "password">();
+  public type = input.required<"text" | "email" | "password" | "date">();
+  public maxDate = input("");
 
   constructor(@Self() public ngControl: NgControl) {
     this.ngControl.valueAccessor = this;
