@@ -12,8 +12,21 @@ export class MemberService {
   public editMode = signal(false);
   public member = signal<Member | null>(null);
 
-  public getMembers(): Observable<Member[]> {
-    return this.http.get<Member[]>(`${this.baseUrl}/members`);
+  public getMembers(pageNumber = 1, pageSize = 5): Observable<PaginationResult<Member>> {
+    let params = new HttpParams();
+
+    params = params.append("pageNumber", pageNumber);
+    params = params.append("pageSize", pageSize);
+
+    const response = this.http.get<PaginationResult<Member>>(`${this.baseUrl}/members`, { params });
+    response.subscribe({
+      next: response => {
+        console.log(response);
+        return response;
+      },
+    });
+    // .pipe(map(members => members.map<Member>(this.toMember)));
+    return response;
   }
 
   public getMember(id: string): Observable<Member> {
