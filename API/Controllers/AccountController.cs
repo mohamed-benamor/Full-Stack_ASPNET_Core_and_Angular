@@ -34,6 +34,7 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
         Gender = body.Gender,
         City = body.City,
         Country = body.Country,
+        DateOfBirth = body.DateOfBirth,
       },
     };
 
