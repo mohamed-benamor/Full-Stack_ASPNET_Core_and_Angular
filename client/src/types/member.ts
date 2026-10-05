@@ -7,14 +7,6 @@ type MemberBase = {
   description?: string;
   created: Date;
 };
-
-export type MemberResponse = MemberBase & {
-  "display-name": string;
-  "date-of-birth": Date;
-  "image-url"?: string;
-  "last-active": Date;
-};
-
 export type Member = MemberBase & {
   displayName: string;
   dateOfBirth: Date;
@@ -30,8 +22,4 @@ type MemberBodyBase = {
 
 export type EditableMember = MemberBodyBase & {
   displayName: string;
-};
-
-export type MemberBodyRequest = MemberBodyBase & {
-  "display-name": string;
 };

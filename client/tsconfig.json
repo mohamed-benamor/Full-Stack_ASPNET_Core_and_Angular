@@ -24,7 +24,8 @@
       "@pipes/*": ["./src/core/pipes/*"],
       "@services/*": ["./src/core/services/*"],
       "@shared/*": ["./src/shared/*"],
-      "@types": ["./src/types/index.ts"]
+      "@types": ["./src/types/index.ts"],
+      "@utils": ["./src/utils/index.ts"]
     }
   },
   "angularCompilerOptions": {

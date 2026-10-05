@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
-import { LoginRequest, RegisterRequest, User, UserResponse } from "@types";
+import { LoginRequest, RegisterRequest, User } from "@types";
 import { tap } from "rxjs";
 
 @Service()
@@ -24,20 +24,20 @@ export class AccountService {
       "date-of-birth": credentials["dateOfBirth"],
     };
 
-    return this.http.post<UserResponse>(`${this.baseUrl}/account/register`, body).pipe(
+    return this.http.post<User>(`${this.baseUrl}/account/register`, body).pipe(
       tap(user => {
         if (user) {
-          this.setCurrentUser(this.toUser(user));
+          this.setCurrentUser(user);
         }
       }),
     );
   }
 
   public login(credentials: LoginRequest) {
-    return this.http.post<UserResponse>(`${this.baseUrl}/account/login`, credentials).pipe(
+    return this.http.post<User>(`${this.baseUrl}/account/login`, credentials).pipe(
       tap(user => {
         if (user) {
-          this.setCurrentUser(this.toUser(user));
+          this.setCurrentUser(user);
         }
       }),
     );
@@ -46,15 +46,5 @@ export class AccountService {
   public logout() {
     this.currentUser.set(null);
     localStorage.removeItem("user");
-  }
-
-  private toUser(user: UserResponse): User {
-    return {
-      id: user["id"],
-      displayName: user["display-name"],
-      email: user["email"],
-      token: user["token"],
-      imageUrl: user["image-url"],
-    };
   }
 }
