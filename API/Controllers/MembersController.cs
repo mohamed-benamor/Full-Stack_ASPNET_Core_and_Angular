@@ -14,10 +14,12 @@ public class MembersController(IMemberRepository repository, IPhotoService photo
 {
   [HttpGet]
   public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers(
-    [FromQuery] PagingParams pagingParams
+    [FromQuery] MemberParams memberParams
   )
   {
-    return Ok(await repository.GetMembersAsync(pagingParams));
+    memberParams.CurrentMemberId = User.GetMemberId();
+
+    return Ok(await repository.GetMembersAsync(memberParams));
   }
 
   [HttpPut]
