@@ -1,15 +1,17 @@
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal, ViewChild } from "@angular/core";
 import { MemberService } from "@services/member.service";
 import { Paginator } from "@shared/paginator/paginator.component";
 import { Member, MemberParams, PaginationResult } from "@types";
-import { MemberCard } from "../member-card/member-card.component";
+import { MemberCard } from "@features/members/member-card/member-card.component";
+import { FilterModal } from "@features/members/filter-modal/filter-modal.component";
 
 @Component({
-  imports: [MemberCard, Paginator],
+  imports: [MemberCard, Paginator, FilterModal],
   selector: "app-member-list",
   templateUrl: "./member-list.component.html",
 })
 export class MemberList implements OnInit {
+  @ViewChild("filterModal") private modal!: FilterModal;
   private readonly service = inject(MemberService);
   private memberParams = new MemberParams();
 
@@ -22,6 +24,23 @@ export class MemberList implements OnInit {
   protected onPageChange(event: { pageNumber: number, pageSize: number; }) {
     this.memberParams.pageNumber = event.pageNumber
     this.memberParams.pageSize = event.pageSize;
+    this.loadMembers();
+  }
+
+  protected openModal() {
+    this.modal.open();
+  }
+
+  protected onClose() {
+    console.log("Modal closed")
+  }
+
+  protected onFilterChange(data: MemberParams) {
+    console.log("Modal submitted data: ", data);
+  }
+
+  protected resetFilters() {
+    this.memberParams = new MemberParams();
     this.loadMembers();
   }
 
