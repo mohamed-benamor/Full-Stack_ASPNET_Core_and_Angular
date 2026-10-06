@@ -1,13 +1,14 @@
 import { DatePipe } from "@angular/common";
 import { Component, HostListener, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormsModule, NgForm } from "@angular/forms";
+import { TimeAgoPipe } from "@pipes/time-ago.pipe";
 import { AccountService } from "@services/account.service";
 import { MemberService } from "@services/member.service";
 import { ToastService } from "@services/toast.service";
 import { EditableMember, Member } from "@types";
 
 @Component({
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, TimeAgoPipe],
   selector: "app-member-profile",
   templateUrl: "./member-profile.component.html",
 })
