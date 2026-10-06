@@ -6,18 +6,19 @@ import { Component, computed, input, model, output } from "@angular/core";
   templateUrl: "./paginator.component.html",
 })
 export class Paginator {
-  public pageNumber = model(1);
-  public pageSize = model(10);
-  public totalCount = input(0);
-  pageSizeOptions = input([5, 10, 20, 50]);
+  protected readonly pageChange = output<{ pageNumber: number; pageSize: number }>();
 
-  pageChange = output<{ pageNumber: number; pageSize: number }>();
+  public readonly pageNumber = model(1);
+  public readonly pageSize = model(10);
+  public readonly totalCount = input(0);
+  public readonly totalPages = input(0);
+  public readonly pageSizeOptions = input([5, 10, 20, 50]);
 
-  lastItemIndex = computed(() => {
+  protected lastItemIndex = computed(() => {
     return Math.min(this.pageNumber() * this.pageSize(), this.totalCount());
   });
 
-  onPageChange(newPage?: number, pageSize?: EventTarget | null) {
+  protected onPageChange(newPage?: number, pageSize?: EventTarget | null) {
     if (newPage) {
       this.pageNumber.set(newPage);
     }
