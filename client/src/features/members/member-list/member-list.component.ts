@@ -78,6 +78,7 @@ export class MemberList implements OnInit {
 
   protected resetFilters() {
     this.memberParams = new MemberParams();
+    this.updatedParams = new MemberParams();
     this.loadMembers();
   }
 

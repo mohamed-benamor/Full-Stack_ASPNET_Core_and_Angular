@@ -1,4 +1,4 @@
-import { Component, ElementRef, output, ViewChild } from "@angular/core";
+import { Component, ElementRef, model, output, ViewChild } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { MAX_AGE, MIN_AGE } from "@constants";
 import { MemberParams } from "@types";
@@ -13,15 +13,15 @@ export class FilterModal {
   protected readonly minAge = MIN_AGE;
   protected readonly maxAge = MAX_AGE;
 
-  protected closeModel = output();
-  protected submitData = output<MemberParams>();
-  protected memberParams = new MemberParams();
+  protected readonly closeModel = output();
+  protected readonly submitData = output<MemberParams>();
+  protected readonly memberParams = model(new MemberParams());
 
   constructor() {
     const filters = localStorage.getItem("filters");
 
     if (filters) {
-      this.memberParams = JSON.parse(filters);
+      this.memberParams.set(JSON.parse(filters));
     }
   }
 
@@ -35,23 +35,23 @@ export class FilterModal {
   }
 
   protected submit() {
-    this.submitData.emit(this.memberParams);
+    this.submitData.emit(this.memberParams());
     this.close();
   }
 
   protected onMinAgeChange() {
-    if (this.memberParams.minAge < this.minAge) {
-      this.memberParams.minAge = this.minAge;
+    if (this.memberParams().minAge < this.minAge) {
+      this.memberParams().minAge = this.minAge;
     }
   }
 
   protected onMaxAgeChange() {
-    if (this.memberParams.maxAge < this.memberParams.minAge) {
-      this.memberParams.maxAge = this.memberParams.minAge;
+    if (this.memberParams().maxAge < this.memberParams().minAge) {
+      this.memberParams().maxAge = this.memberParams().minAge;
     }
 
-    if (this.memberParams.maxAge > this.maxAge) {
-      this.memberParams.maxAge = this.maxAge;
+    if (this.memberParams().maxAge > this.maxAge) {
+      this.memberParams().maxAge = this.maxAge;
     }
   }
 }
