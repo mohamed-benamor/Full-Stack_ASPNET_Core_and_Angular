@@ -14,15 +14,41 @@ export class MemberList implements OnInit {
   @ViewChild("filterModal") private modal!: FilterModal;
   private readonly service = inject(MemberService);
   private memberParams = new MemberParams();
+  private updatedParams = new MemberParams();
 
   protected readonly paginatedMembers = signal<PaginationResult<Member> | null>(null);
+
+  get displayedMessage(): string {
+    const defaultParams = new MemberParams();
+
+    const filters: string[] = [];
+
+    if (this.updatedParams.gender) {
+      filters.push(`${this.updatedParams.gender}s`);
+    } else {
+      filters.push("Males, Females");
+    }
+
+    if (
+      this.updatedParams.minAge !== defaultParams.minAge ||
+      this.updatedParams.maxAge !== defaultParams.maxAge
+    ) {
+      filters.push(` ages ${this.updatedParams.minAge}-${this.updatedParams.maxAge}`);
+    }
+
+    filters.push(
+      this.updatedParams.orderBy === "lastActive" ? "Recently active" : "Newest members",
+    );
+
+    return filters.length > 0 ? `Selected: ${filters.join(" | ")}` : "All members";
+  }
 
   public ngOnInit(): void {
     this.loadMembers();
   }
 
-  protected onPageChange(event: { pageNumber: number, pageSize: number; }) {
-    this.memberParams.pageNumber = event.pageNumber
+  protected onPageChange(event: { pageNumber: number; pageSize: number }) {
+    this.memberParams.pageNumber = event.pageNumber;
     this.memberParams.pageSize = event.pageSize;
     this.loadMembers();
   }
@@ -32,11 +58,12 @@ export class MemberList implements OnInit {
   }
 
   protected onClose() {
-    console.log("Modal closed")
+    console.log("Modal closed");
   }
 
   protected onFilterChange(data: MemberParams) {
-    this.memberParams = data;
+    this.memberParams = { ...data };
+    this.updatedParams = { ...data };
     this.loadMembers();
   }
 
@@ -47,7 +74,7 @@ export class MemberList implements OnInit {
 
   private loadMembers() {
     this.service.getMembers(this.memberParams).subscribe({
-      next: response => this.paginatedMembers.set(response)
+      next: response => this.paginatedMembers.set(response),
     });
   }
 }
