@@ -43,6 +43,15 @@ export class MemberList implements OnInit {
     return filters.length > 0 ? `Selected: ${filters.join(" | ")}` : "All members";
   }
 
+  constructor() {
+    const filters = localStorage.getItem("filters");
+
+    if (filters) {
+      this.memberParams = JSON.parse(filters);
+      this.updatedParams = JSON.parse(filters);
+    }
+  }
+
   public ngOnInit(): void {
     this.loadMembers();
   }
