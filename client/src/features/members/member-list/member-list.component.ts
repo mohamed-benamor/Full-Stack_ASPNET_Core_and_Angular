@@ -1,24 +1,22 @@
-import { AsyncPipe } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { MemberService } from "@services/member.service";
-import { Member, PaginationResult } from "@types";
-import { Observable } from "rxjs";
-import { MemberCard } from "../member-card/member-card.component";
 import { Paginator } from "@shared/paginator/paginator.component";
+import { Member, PaginationResult } from "@types";
+import { MemberCard } from "../member-card/member-card.component";
 
 @Component({
-  imports: [AsyncPipe, MemberCard, Paginator],
+  imports: [MemberCard, Paginator],
   selector: "app-member-list",
   templateUrl: "./member-list.component.html",
 })
-export class MemberList {
+export class MemberList implements OnInit {
   private readonly service = inject(MemberService);
   private pageNumber = 1;
   private pageSize = 5;
 
-  protected $paginatedMembers?: Observable<PaginationResult<Member>>;
+  protected readonly paginatedMembers = signal<PaginationResult<Member> | null>(null);
 
-  constructor() {
+  public ngOnInit(): void {
     this.loadMembers();
   }
 
@@ -29,6 +27,8 @@ export class MemberList {
   }
 
   private loadMembers() {
-    this.$paginatedMembers = this.service.getMembers(this.pageNumber, this.pageSize);
+    this.service.getMembers(this.pageNumber, this.pageSize).subscribe({
+      next: response => this.paginatedMembers.set(response)
+    });
   }
 }
