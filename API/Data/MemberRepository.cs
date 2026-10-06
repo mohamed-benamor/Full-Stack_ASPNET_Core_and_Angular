@@ -31,6 +31,13 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
       query = query.Where(member => member.Gender == memberParams.Gender);
     }
 
+    var minDateOfBirth = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MaxAge - 1));
+    var maxDateOfBirth = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MinAge));
+
+    query = query.Where(member =>
+      member.DateOfBirth >= minDateOfBirth && member.DateOfBirth <= maxDateOfBirth
+    );
+
     return await PaginationHelper.CreateAsync(
       query,
       memberParams.PageNumber,
