@@ -15,6 +15,8 @@ export class MemberService {
   public getMembers(memberParams: MemberParams): Observable<PaginationResult<Member>> {
     let params = new HttpParams();
 
+    params = params.append("orderBy", memberParams.orderBy);
+
     params = params.append("pageNumber", memberParams.pageNumber);
     params = params.append("minAge", memberParams.minAge);
     params = params.append("maxAge", memberParams.maxAge);
