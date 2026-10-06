@@ -1,8 +1,5 @@
-type PhotoBase = {
+export type Photo = {
   id: number;
   url: string;
-};
-
-export type Photo = PhotoBase & {
   publicId?: string;
 };

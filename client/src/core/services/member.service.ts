@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
-import { EditableMember, Member, PaginationResult, Photo } from "@types";
+import { EditableMember, Member, MemberParams, PaginationResult, Photo } from "@types";
 import { Observable, tap } from "rxjs";
 
 @Service()
@@ -12,21 +12,20 @@ export class MemberService {
   public editMode = signal(false);
   public member = signal<Member | null>(null);
 
-  public getMembers(pageNumber = 1, pageSize = 5): Observable<PaginationResult<Member>> {
+  public getMembers(memberParams: MemberParams): Observable<PaginationResult<Member>> {
     let params = new HttpParams();
 
-    params = params.append("pageNumber", pageNumber);
-    params = params.append("pageSize", pageSize);
+    params = params.append("pageNumber", memberParams.pageNumber);
+    params = params.append("minAge", memberParams.minAge);
+    params = params.append("maxAge", memberParams.maxAge);
+    params = params.append("pageNumber", memberParams.pageNumber);
+    params = params.append("pageSize", memberParams.pageSize);
 
-    const response = this.http.get<PaginationResult<Member>>(`${this.baseUrl}/members`, { params });
-    response.subscribe({
-      next: response => {
-        console.log(response);
-        return response;
-      },
-    });
-    // .pipe(map(members => members.map<Member>(this.toMember)));
-    return response;
+    if (memberParams.gender) {
+      params = params.append("gender", memberParams.gender);
+    }
+
+    return this.http.get<PaginationResult<Member>>(`${this.baseUrl}/members`, { params });
   }
 
   public getMember(id: string): Observable<Member> {
