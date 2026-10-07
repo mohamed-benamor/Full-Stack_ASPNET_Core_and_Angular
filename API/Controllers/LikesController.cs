@@ -1,9 +1,9 @@
+namespace API.Controllers;
+
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers;
 
 public class LikesController(ILikeRepository repository) : BaseApiController
 {

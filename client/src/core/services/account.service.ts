@@ -3,17 +3,19 @@ import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
 import { LoginRequest, RegisterRequest, User } from "@types";
 import { tap } from "rxjs";
+import { LikesService } from "./likes.service";
 
 @Service()
 export class AccountService {
   private readonly http = inject(HttpClient);
+  private readonly likesService = inject(LikesService);
   private readonly baseUrl = environment.apiUrl;
 
-  public currentUser = signal<User | null>(null);
+  public readonly currentUser = signal<User | null>(null);
 
   public setCurrentUser(user: User) {
     this.currentUser.set(user);
-
+    this.likesService.getLikeIds();
     localStorage.setItem("user", JSON.stringify(this.currentUser()));
   }
 
@@ -46,6 +48,7 @@ export class AccountService {
   public logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("filters");
+    this.likesService.clearLikeIds();
     this.currentUser.set(null);
   }
 }

@@ -9,8 +9,8 @@ export class MemberService {
   private readonly baseUrl = environment.apiUrl;
   private readonly http = inject(HttpClient);
 
-  public editMode = signal(false);
-  public member = signal<Member | null>(null);
+  public readonly editMode = signal(false);
+  public readonly member = signal<Member | null>(null);
 
   public getMembers(memberParams: MemberParams): Observable<PaginationResult<Member>> {
     let params = new HttpParams();
