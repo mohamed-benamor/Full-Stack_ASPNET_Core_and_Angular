@@ -59,6 +59,8 @@ builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 
+builder.Services.AddScoped<ILikeRepository, LikeRepository>();
+
 builder.Services.AddScoped<LogUserActivity>();
 
 builder.Services.Configure<CloudinarySettings>(
