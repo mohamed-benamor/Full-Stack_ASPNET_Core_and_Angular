@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { inject, Service, signal } from "@angular/core";
 import { environment } from "@environments";
-import { Member } from "@types";
+import { LikesParams, Member, PaginationResult } from "@types";
 
 @Service()
 export class LikesService {
@@ -14,8 +14,14 @@ export class LikesService {
     return this.http.post(`${this.baseUrl}/likes/${targetMemberId}`, {});
   }
 
-  public getLikes(predicate: string) {
-    return this.http.get<Member[]>(`${this.baseUrl}/likes?predicate=${predicate}`);
+  public getLikes(likesParams: LikesParams) {
+    let params = new HttpParams();
+
+    params = params.append("pageNumber", likesParams.pageNumber);
+    params = params.append("pageSize", likesParams.pageSize);
+    params = params.append("predicate", likesParams.predicate);
+
+    return this.http.get<PaginationResult<Member>>(`${this.baseUrl}/likes`, { params });
   }
 
   public getLikeIds() {

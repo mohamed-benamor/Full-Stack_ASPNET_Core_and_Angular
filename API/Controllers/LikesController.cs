@@ -2,6 +2,7 @@ namespace API.Controllers;
 
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,9 +50,12 @@ public class LikesController(ILikeRepository repository) : BaseApiController
   }
 
   [HttpGet]
-  public async Task<ActionResult<IReadOnlyList<Member>>> GetMemberLikes(string predicate)
+  public async Task<ActionResult<IReadOnlyList<Member>>> GetMemberLikes(
+    [FromQuery] LikesParam likesParam
+  )
   {
-    var members = await repository.GetMemberLikes(predicate, User.GetMemberId());
+    likesParam.MemberId = User.GetMemberId();
+    var members = await repository.GetMemberLikes(likesParam);
 
     return Ok(members);
   }

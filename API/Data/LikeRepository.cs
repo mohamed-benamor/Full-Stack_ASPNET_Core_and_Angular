@@ -2,6 +2,7 @@ namespace API.Data;
 
 using System;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,32 +18,37 @@ public class LikeRepository(AppDbContext context) : ILikeRepository
     return await context.Likes.FindAsync(sourceMemberId, targetMemberId);
   }
 
-  public async Task<IReadOnlyList<Member>> GetMemberLikes(string predicate, string memberId)
+  public async Task<PaginatedResult<Member>> GetMemberLikes(LikesParam likesParam)
   {
     var query = context.Likes.AsQueryable();
 
-    switch (predicate)
+    var result = likesParam.Predicate switch
     {
-      case "liked":
-        return await query
-          .Where(memberLike => memberLike.SourceMemberId == memberId)
-          .Select(memberLike => memberLike.TargetMember)
-          .ToListAsync();
-      case "likedBy":
-        return await query
-          .Where(memberLike => memberLike.TargetMemberId == memberId)
-          .Select(memberLike => memberLike.SourceMember)
-          .ToListAsync();
-      default:
-        var likeIds = await GetCurrentMemberLikeIds(memberId);
+      "liked" => query
+        .Where(memberLike => memberLike.SourceMemberId == likesParam.MemberId)
+        .Select(memberLike => memberLike.TargetMember),
+      "likedBy" => query
+        .Where(memberLike => memberLike.TargetMemberId == likesParam.MemberId)
+        .Select(memberLike => memberLike.SourceMember),
 
-        return await query
-          .Where(memberLike =>
-            memberLike.TargetMemberId == memberId && likeIds.Contains(memberLike.SourceMemberId)
-          )
-          .Select(memberLike => memberLike.SourceMember)
-          .ToListAsync();
-    }
+      _ => await GetCurrentMemberLikeIdsQuery(query, likesParam.MemberId),
+    };
+
+    return await PaginationHelper.CreateAsync(result, likesParam.PageNumber, likesParam.PageSize);
+  }
+
+  private async Task<IQueryable<Member>> GetCurrentMemberLikeIdsQuery(
+    IQueryable<MemberLike> query,
+    string memberId
+  )
+  {
+    var likeIds = await GetCurrentMemberLikeIds(memberId);
+
+    return query
+      .Where(memberLike =>
+        memberLike.TargetMemberId == memberId && likeIds.Contains(memberLike.SourceMemberId)
+      )
+      .Select(memberLike => memberLike.SourceMember);
   }
 
   public async Task<IReadOnlyList<string>> GetCurrentMemberLikeIds(string memberId)
