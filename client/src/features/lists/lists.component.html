@@ -1,0 +1,22 @@
+<div class="tabs tabs-box tabs-lg text-primary w-fit">
+  @for (tab of tabs; track $index) {
+    <button
+      role="tab"
+      class="tab"
+      [class.tab-active]="predicate === tab.value"
+      (click)="setPredicate(tab.value)"
+    >
+      {{ tab.label }}
+    </button>
+  }
+</div>
+
+@if (members().length > 0) {
+  <div
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mt-3"
+  >
+    @for (member of members(); track member.id) {
+      <app-member-card [member]="member" />
+    }
+  </div>
+}
