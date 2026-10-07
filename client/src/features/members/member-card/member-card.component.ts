@@ -17,4 +17,20 @@ export class MemberCard {
   );
 
   public readonly member = input.required<Member>();
+
+  protected toggleLike(event: Event) {
+    event.stopPropagation();
+
+    this.likeService.toggleLike(this.member().id).subscribe({
+      next: () => {
+        if (this.hasLiked()) {
+          this.likeService.likeIds.update(ids =>
+            ids.filter(memberId => memberId !== this.member().id),
+          );
+        } else {
+          this.likeService.likeIds.update(ids => [...ids, this.member().id]);
+        }
+      },
+    });
+  }
 }
